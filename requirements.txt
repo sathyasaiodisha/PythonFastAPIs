@@ -3,4 +3,5 @@ redis
 types-redis
 sqlalchemy
 sqlmodel
+pyodbc
 uvicorn
