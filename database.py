@@ -8,7 +8,8 @@ username = "ssswsodsa"
 password = "Sr!s@thy@s@!"
 servername = "103.133.214.224,1436"
 dbname = "srisathyasaiod"
-drivername = "ODBC Driver 17 for SQL Server"
+drivername = "FreeTDS"
+#ODBC Driver 17 for SQL Server"
 
 encodedPwd=urllib.parse.quote_plus(password)
 encodedDriverName = urllib.parse.quote_plus(drivername)
