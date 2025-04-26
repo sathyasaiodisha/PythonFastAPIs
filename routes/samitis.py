@@ -1,20 +1,21 @@
-from database import SessionLocal, Base
+from database import SessionLocal
 from fastapi import APIRouter
 from sqlmodel import func, desc
+from models import Samithi
 
 router = APIRouter()
 
 @router.get("/samithis")
 def get_samithis():
     with SessionLocal() as session:
-        samithisModel = Base.classes.Samithi
+        samithisModel = Samithi
         samithis = session.query(samithisModel).all()
         return samithis
     
 @router.post("/samithis/add")
 def create_samithi(districtid:int, samithiregno: str, samithiname: str):
     with SessionLocal() as session:
-        samithisModel = Base.classes.Samithi
+        samithisModel = Samithi
         maxSamithiId = session.query(func.max(samithisModel.ID)).scalar()
         maxValOfSamithiCode = session.query(samithisModel.SamithiCode).filter(samithisModel.DistrictID==districtid).order_by(desc(samithisModel.SamithiCode)).limit(1).scalar()
         splitMaxValOfSamithiCode = (str(maxValOfSamithiCode)).split("-")
@@ -30,9 +31,9 @@ def create_samithi(districtid:int, samithiregno: str, samithiname: str):
         return {"message":"Samithi created", "samithi_id":strValOfSamithiCodeToCreate}
     
 @router.put("/samithis/update/{id}")
-def update_saidistrict(id: int, districtid:int, samithiregno: str, samithiname: str):
+def update_samithi(id: int, districtid:int, samithiregno: str, samithiname: str):
     with SessionLocal() as session:
-        samithisModel = Base.classes.Samithi
+        samithisModel = Samithi
         samithiToUpdate = session.query(samithisModel).filter(samithisModel.ID == id).first()
         if samithiToUpdate:
             samithiToUpdate.DistrictID = districtid
@@ -44,9 +45,9 @@ def update_saidistrict(id: int, districtid:int, samithiregno: str, samithiname: 
         return {"error": f"Samithi with ID {id} not found"}
     
 @router.delete("/samithis/delete/{id}")
-def update_saidistrict(id: int):
+def delete_samithi(id: int):
     with SessionLocal() as session:
-        samithisModel = Base.classes.Samithi
+        samithisModel = Samithi
         samithiToDelete = session.query(samithisModel).filter(samithisModel.ID == id).first()
         if samithiToDelete:
             session.delete(samithiToDelete)

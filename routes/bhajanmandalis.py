@@ -1,20 +1,21 @@
-from database import SessionLocal, Base
+from database import SessionLocal
 from fastapi import APIRouter
 from sqlmodel import func, desc
+from models import BhajanMandali
 
 router = APIRouter()
 
 @router.get("/bhajanmandalis")
 def get_bhajanmandalis():
     with SessionLocal() as session:
-        bhajanmandaliModel = Base.classes.BhajanMandali
+        bhajanmandaliModel = BhajanMandali
         bhajanmandalis = session.query(bhajanmandaliModel).all()
         return bhajanmandalis
     
 @router.post("/bhajanmandalis/add")
-def create_samithi(samithiid:int, bhajanmandaliregno: str, bhajanmandaliname: str):
+def create_bhajanmandali(samithiid:int, bhajanmandaliregno: str, bhajanmandaliname: str):
     with SessionLocal() as session:
-        bhajanmandaliModel = Base.classes.BhajanMandali
+        bhajanmandaliModel = BhajanMandali
         maxBhajanMandaliId = session.query(func.max(bhajanmandaliModel.ID)).scalar()
         maxValOfBMCode = session.query(bhajanmandaliModel.BhajanMandaliCode).filter(bhajanmandaliModel.SamithiID==samithiid).order_by(desc(bhajanmandaliModel.BhajanMandaliCode)).limit(1).scalar()
         splitMaxValOfBMCode = (str(maxValOfBMCode)).split("-")
@@ -32,7 +33,7 @@ def create_samithi(samithiid:int, bhajanmandaliregno: str, bhajanmandaliname: st
 @router.put("/bhajanmandalis/update/{id}")
 def update_bhajanmandali(id: int, samithiid:int, bhajanmandaliregno: str, bhajanmandaliname: str):
     with SessionLocal() as session:
-        bhajanmandaliModel = Base.classes.BhajanMandali
+        bhajanmandaliModel = BhajanMandali
         bhajanmandaliToUpdate = session.query(bhajanmandaliModel).filter(bhajanmandaliModel.ID == id).first()
         if bhajanmandaliToUpdate:
             bhajanmandaliToUpdate.SamithiID = samithiid
@@ -46,7 +47,7 @@ def update_bhajanmandali(id: int, samithiid:int, bhajanmandaliregno: str, bhajan
 @router.delete("/bhajanmandalis/delete/{id}")
 def delete_bhajanmandali(id: int):
     with SessionLocal() as session:
-        bhajanmandaliModel = Base.classes.BhajanMandali
+        bhajanmandaliModel = BhajanMandali
         bhajanmandaliToDelete = session.query(bhajanmandaliModel).filter(bhajanmandaliModel.ID == id).first()
         if bhajanmandaliToDelete:
             session.delete(bhajanmandaliToDelete)

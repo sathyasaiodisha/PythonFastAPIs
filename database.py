@@ -18,12 +18,14 @@ encodedDriverName = urllib.parse.quote_plus(drivername)
 # **MS SQL Server Connection String**
 DATABASE_URL = f"mssql+pyodbc://{username}:{encodedPwd}@{servername}/{dbname}?driver={encodedDriverName}"
 
+
+
 # **Create Engine & Session**
 engine = create_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # **Automatically Reflect the Database Tables**
-Base = automap_base()
-Base.prepare(engine, reflect=True, schema="org")  # This dynamically loads all tables from the database
-Base.prepare(engine, reflect=True, schema="txnm")  # This dynamically loads all tables from the database
-Base.prepare(engine, reflect=True, schema="ops")  # This dynamically loads all tables from the database
+# Base = automap_base()
+# Base.prepare(engine, reflect=True, schema="org")  # This dynamically loads all tables from the database
+# Base.prepare(engine, reflect=True, schema="txnm")  # This dynamically loads all tables from the database
+# Base.prepare(engine, reflect=True, schema="ops")  # This dynamically loads all tables from the database
