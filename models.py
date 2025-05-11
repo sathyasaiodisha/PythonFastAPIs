@@ -16,7 +16,7 @@ class ActivityFrequency(Base):
         {'schema': 'txnm'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     FrequencyType: Mapped[str] = mapped_column(Unicode(50, 'SQL_Latin1_General_CP1_CI_AS'))
     CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
     UpdatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
@@ -34,7 +34,7 @@ class ActivityTypes(Base):
         {'schema': 'txnm'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     ActivityType: Mapped[str] = mapped_column(Unicode(50, 'SQL_Latin1_General_CP1_CI_AS'))
     CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
     UpdatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
@@ -53,7 +53,7 @@ class BhajanMandali(Base):
         {'schema': 'txnm'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     BhajanMandaliCode: Mapped[str] = mapped_column(Unicode(20, 'SQL_Latin1_General_CP1_CI_AS'))
     BhajanMandaliRegNo: Mapped[str] = mapped_column(Unicode(10, 'SQL_Latin1_General_CP1_CI_AS'))
     BhajanMandaliName: Mapped[str] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
@@ -73,7 +73,7 @@ class District(Base):
         {'schema': 'txnm'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     DistrictName: Mapped[str] = mapped_column(Unicode(50, 'SQL_Latin1_General_CP1_CI_AS'))
     DistrictCode: Mapped[str] = mapped_column(Unicode(4, 'SQL_Latin1_General_CP1_CI_AS'))
     CreatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
@@ -81,8 +81,8 @@ class District(Base):
     UpdatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
     UpdatedDate: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime, server_default=text('(getdate())'))
 
-    Events: Mapped[List['Events']] = relationship('Events', back_populates='District_')
     DistrictOfficeBearer: Mapped[List['DistrictOfficeBearer']] = relationship('DistrictOfficeBearer', back_populates='District_')
+    Events: Mapped[List['Events']] = relationship('Events', back_populates='District_')
 
 
 class OrgHierarchyCodes(Base):
@@ -94,7 +94,7 @@ class OrgHierarchyCodes(Base):
         {'schema': 'txnm'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     OrgLevel: Mapped[str] = mapped_column(Unicode(50, 'SQL_Latin1_General_CP1_CI_AS'))
     OrgLevelCode: Mapped[str] = mapped_column(Unicode(50, 'SQL_Latin1_General_CP1_CI_AS'))
     CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
@@ -103,8 +103,8 @@ class OrgHierarchyCodes(Base):
     UpdatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
 
     Designation: Mapped[List['Designation']] = relationship('Designation', back_populates='OrgHierarchyCodes_')
-    Events: Mapped[List['Events']] = relationship('Events', back_populates='OrgHierarchyCodes_')
     Activities: Mapped[List['Activities']] = relationship('Activities', back_populates='OrgHierarchyCodes_')
+    Events: Mapped[List['Events']] = relationship('Events', back_populates='OrgHierarchyCodes_')
 
 
 class Samithi(Base):
@@ -116,7 +116,7 @@ class Samithi(Base):
         {'schema': 'txnm'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     SamithiCode: Mapped[str] = mapped_column(Unicode(10, 'SQL_Latin1_General_CP1_CI_AS'))
     SamithiRegNo: Mapped[str] = mapped_column(Unicode(5, 'SQL_Latin1_General_CP1_CI_AS'))
     SamithiName: Mapped[str] = mapped_column(Unicode(50, 'SQL_Latin1_General_CP1_CI_AS'))
@@ -126,8 +126,8 @@ class Samithi(Base):
     CreatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
     UpdatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
 
-    Events: Mapped[List['Events']] = relationship('Events', back_populates='Samithi_')
     SamithiOfficeBearer: Mapped[List['SamithiOfficeBearer']] = relationship('SamithiOfficeBearer', back_populates='Samithi_')
+    Events: Mapped[List['Events']] = relationship('Events', back_populates='Samithi_')
 
 
 class Wings(Base):
@@ -138,7 +138,7 @@ class Wings(Base):
         {'schema': 'txnm'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     WingName: Mapped[str] = mapped_column(Unicode(50, 'SQL_Latin1_General_CP1_CI_AS'))
     CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
     UpdatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
@@ -158,7 +158,7 @@ class Designation(Base):
         {'schema': 'txnm'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     DesignationName: Mapped[str] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
     DesignationCode: Mapped[str] = mapped_column(Unicode(5, 'SQL_Latin1_General_CP1_CI_AS'))
     CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
@@ -182,7 +182,7 @@ class Programmes(Base):
         {'schema': 'txnm'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
     UpdatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
     WingID: Mapped[Optional[int]] = mapped_column(Integer)
@@ -191,45 +191,37 @@ class Programmes(Base):
     UpdatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
 
     Wings_: Mapped[Optional['Wings']] = relationship('Wings', back_populates='Programmes')
-    Events: Mapped[List['Events']] = relationship('Events', back_populates='Programmes_')
     Activities: Mapped[List['Activities']] = relationship('Activities', back_populates='Programmes_')
+    Events: Mapped[List['Events']] = relationship('Events', back_populates='Programmes_')
 
 
-class Events(Base):
-    __tablename__ = 'Events'
+class Activities(Base):
+    __tablename__ = 'Activities'
     __table_args__ = (
-        ForeignKeyConstraint(['DistrictID'], ['txnm.District.ID'], name='FK__Events__District__1332DBDC'),
-        ForeignKeyConstraint(['OrgLevelID'], ['txnm.OrgHierarchyCodes.ID'], name='FK__Events__OrgLevel__14270015'),
-        ForeignKeyConstraint(['ProgrammeID'], ['txnm.Programmes.ID'], name='FK__Events__Programm__151B244E'),
-        ForeignKeyConstraint(['SamithiID'], ['txnm.Samithi.ID'], name='FK__Events__SamithiI__160F4887'),
-        PrimaryKeyConstraint('ID', name='PK__Events__3214EC27CA8CDB70'),
-        {'schema': 'ops'}
+        ForeignKeyConstraint(['ActivityFrequencyID'], ['txnm.ActivityFrequency.ID'], name='FK__Activitie__Activ__1DB06A4F'),
+        ForeignKeyConstraint(['ActivityTypeID'], ['txnm.ActivityTypes.ID'], name='FK__Activitie__Activ__1CBC4616'),
+        ForeignKeyConstraint(['OrgLevelID'], ['txnm.OrgHierarchyCodes.ID'], name='FK__Activitie__OrgLe__1EA48E88'),
+        ForeignKeyConstraint(['ProgrammeID'], ['txnm.Programmes.ID'], name='FK__Activitie__Progr__1F98B2C1'),
+        PrimaryKeyConstraint('ID', name='PK__Activiti__3214EC27BFECD90B'),
+        Index('UQ__Activiti__685755E789B693BD', 'Activity', unique=True),
+        {'schema': 'txnm'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
-    ProgrammeID: Mapped[int] = mapped_column(Integer)
-    OrgLevelID: Mapped[int] = mapped_column(Integer)
-    EventTitle: Mapped[str] = mapped_column(Unicode(200, 'SQL_Latin1_General_CP1_CI_AS'))
-    EventDate: Mapped[datetime.datetime] = mapped_column(DateTime)
-    ToBeFeatured: Mapped[bool] = mapped_column(Boolean, server_default=text('((1))'))
-    IsActive: Mapped[bool] = mapped_column(Boolean, server_default=text('((1))'))
-    IsDeleted: Mapped[bool] = mapped_column(Boolean, server_default=text('((0))'))
-    IsApproved: Mapped[bool] = mapped_column(Boolean, server_default=text('((0))'))
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
+    Activity: Mapped[str] = mapped_column(Unicode(50, 'SQL_Latin1_General_CP1_CI_AS'))
     CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
     UpdatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
-    DistrictID: Mapped[Optional[int]] = mapped_column(Integer)
-    SamithiID: Mapped[Optional[int]] = mapped_column(Integer)
-    EventDescription: Mapped[Optional[str]] = mapped_column(Unicode(1000, 'SQL_Latin1_General_CP1_CI_AS'))
-    EventVenue: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
-    RejectionComments: Mapped[Optional[str]] = mapped_column(Unicode(500, 'SQL_Latin1_General_CP1_CI_AS'))
+    ActivityTypeID: Mapped[Optional[int]] = mapped_column(Integer)
+    ActivityFrequencyID: Mapped[Optional[int]] = mapped_column(Integer)
+    OrgLevelID: Mapped[Optional[int]] = mapped_column(Integer)
+    ProgrammeID: Mapped[Optional[int]] = mapped_column(Integer)
     CreatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
     UpdatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
 
-    District_: Mapped[Optional['District']] = relationship('District', back_populates='Events')
-    OrgHierarchyCodes_: Mapped['OrgHierarchyCodes'] = relationship('OrgHierarchyCodes', back_populates='Events')
-    Programmes_: Mapped['Programmes'] = relationship('Programmes', back_populates='Events')
-    Samithi_: Mapped[Optional['Samithi']] = relationship('Samithi', back_populates='Events')
-    EventsDigitalArchive: Mapped[List['EventsDigitalArchive']] = relationship('EventsDigitalArchive', back_populates='Events_')
+    ActivityFrequency_: Mapped[Optional['ActivityFrequency']] = relationship('ActivityFrequency', back_populates='Activities')
+    ActivityTypes_: Mapped[Optional['ActivityTypes']] = relationship('ActivityTypes', back_populates='Activities')
+    OrgHierarchyCodes_: Mapped[Optional['OrgHierarchyCodes']] = relationship('OrgHierarchyCodes', back_populates='Activities')
+    Programmes_: Mapped[Optional['Programmes']] = relationship('Programmes', back_populates='Activities')
 
 
 class DistrictOfficeBearer(Base):
@@ -241,7 +233,7 @@ class DistrictOfficeBearer(Base):
         {'schema': 'org'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
     UpdatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
     DistrictID: Mapped[Optional[int]] = mapped_column(Integer)
@@ -270,7 +262,7 @@ class SamithiOfficeBearer(Base):
         {'schema': 'org'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     DesignationID: Mapped[int] = mapped_column(Integer)
     CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
     UpdatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
@@ -298,7 +290,7 @@ class StateOfficeBearer(Base):
         {'schema': 'org'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     DesignationID: Mapped[int] = mapped_column(Integer)
     CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
     UpdatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
@@ -316,33 +308,41 @@ class StateOfficeBearer(Base):
     Designation_: Mapped['Designation'] = relationship('Designation', back_populates='StateOfficeBearer')
 
 
-class Activities(Base):
-    __tablename__ = 'Activities'
+class Events(Base):
+    __tablename__ = 'Events'
     __table_args__ = (
-        ForeignKeyConstraint(['ActivityFrequencyID'], ['txnm.ActivityFrequency.ID'], name='FK__Activitie__Activ__1DB06A4F'),
-        ForeignKeyConstraint(['ActivityTypeID'], ['txnm.ActivityTypes.ID'], name='FK__Activitie__Activ__1CBC4616'),
-        ForeignKeyConstraint(['OrgLevelID'], ['txnm.OrgHierarchyCodes.ID'], name='FK__Activitie__OrgLe__1EA48E88'),
-        ForeignKeyConstraint(['ProgrammeID'], ['txnm.Programmes.ID'], name='FK__Activitie__Progr__1F98B2C1'),
-        PrimaryKeyConstraint('ID', name='PK__Activiti__3214EC27BFECD90B'),
-        Index('UQ__Activiti__685755E789B693BD', 'Activity', unique=True),
-        {'schema': 'txnm'}
+        ForeignKeyConstraint(['DistrictID'], ['txnm.District.ID'], name='FK__Events__District__1332DBDC'),
+        ForeignKeyConstraint(['OrgLevelID'], ['txnm.OrgHierarchyCodes.ID'], name='FK__Events__OrgLevel__14270015'),
+        ForeignKeyConstraint(['ProgrammeID'], ['txnm.Programmes.ID'], name='FK__Events__Programm__151B244E'),
+        ForeignKeyConstraint(['SamithiID'], ['txnm.Samithi.ID'], name='FK__Events__SamithiI__160F4887'),
+        PrimaryKeyConstraint('ID', name='PK__Events__3214EC27CA8CDB70'),
+        {'schema': 'ops'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
-    Activity: Mapped[str] = mapped_column(Unicode(50, 'SQL_Latin1_General_CP1_CI_AS'))
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
+    ProgrammeID: Mapped[int] = mapped_column(Integer)
+    OrgLevelID: Mapped[int] = mapped_column(Integer)
+    EventTitle: Mapped[str] = mapped_column(Unicode(200, 'SQL_Latin1_General_CP1_CI_AS'))
+    EventDate: Mapped[datetime.datetime] = mapped_column(DateTime)
+    ToBeFeatured: Mapped[bool] = mapped_column(Boolean, server_default=text('((1))'))
+    IsActive: Mapped[bool] = mapped_column(Boolean, server_default=text('((1))'))
+    IsDeleted: Mapped[bool] = mapped_column(Boolean, server_default=text('((0))'))
+    IsApproved: Mapped[bool] = mapped_column(Boolean, server_default=text('((0))'))
     CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
     UpdatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('(getdate())'))
-    ActivityTypeID: Mapped[Optional[int]] = mapped_column(Integer)
-    ActivityFrequencyID: Mapped[Optional[int]] = mapped_column(Integer)
-    OrgLevelID: Mapped[Optional[int]] = mapped_column(Integer)
-    ProgrammeID: Mapped[Optional[int]] = mapped_column(Integer)
+    DistrictID: Mapped[Optional[int]] = mapped_column(Integer)
+    SamithiID: Mapped[Optional[int]] = mapped_column(Integer)
+    EventDescription: Mapped[Optional[str]] = mapped_column(Unicode(1000, 'SQL_Latin1_General_CP1_CI_AS'))
+    EventVenue: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
+    RejectionComments: Mapped[Optional[str]] = mapped_column(Unicode(500, 'SQL_Latin1_General_CP1_CI_AS'))
     CreatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
     UpdatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
 
-    ActivityFrequency_: Mapped[Optional['ActivityFrequency']] = relationship('ActivityFrequency', back_populates='Activities')
-    ActivityTypes_: Mapped[Optional['ActivityTypes']] = relationship('ActivityTypes', back_populates='Activities')
-    OrgHierarchyCodes_: Mapped[Optional['OrgHierarchyCodes']] = relationship('OrgHierarchyCodes', back_populates='Activities')
-    Programmes_: Mapped[Optional['Programmes']] = relationship('Programmes', back_populates='Activities')
+    District_: Mapped[Optional['District']] = relationship('District', back_populates='Events')
+    OrgHierarchyCodes_: Mapped['OrgHierarchyCodes'] = relationship('OrgHierarchyCodes', back_populates='Events')
+    Programmes_: Mapped['Programmes'] = relationship('Programmes', back_populates='Events')
+    Samithi_: Mapped[Optional['Samithi']] = relationship('Samithi', back_populates='Events')
+    EventsDigitalArchive: Mapped[List['EventsDigitalArchive']] = relationship('EventsDigitalArchive', back_populates='Events_')
 
 
 class EventsDigitalArchive(Base):
@@ -353,7 +353,7 @@ class EventsDigitalArchive(Base):
         {'schema': 'ops'}
     )
 
-    ID: Mapped[int] = mapped_column(Integer, primary_key=True)
+    ID: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     EventID: Mapped[int] = mapped_column(Integer)
     ActivityName: Mapped[str] = mapped_column(Unicode(500, 'SQL_Latin1_General_CP1_CI_AS'))
     ToBeFeatured: Mapped[bool] = mapped_column(Boolean, server_default=text('((1))'))
