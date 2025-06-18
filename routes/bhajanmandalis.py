@@ -1,7 +1,19 @@
 from database import SessionLocal
 from fastapi import APIRouter
 from sqlmodel import func, desc
-from models import BhajanMandali
+from models import BhajanMandali, Samithi
+from pydantic import BaseModel
+
+class BMToUpdate(BaseModel):
+    bmRegNo: str
+    bmName: str
+    updatedBy: str
+
+class BMToCreate(BaseModel):
+    bmName: str
+    bmRegNo: str
+    samithiId: int
+    createdBy: str
 
 router = APIRouter()
 
@@ -12,34 +24,41 @@ def get_bhajanmandalis():
         bhajanmandalis = session.query(bhajanmandaliModel).all()
         return bhajanmandalis
     
+@router.get("/district/{districtId}/bhajanmandalis")
+def get_bhajanmandalis(districtId: int):
+    with SessionLocal() as session:
+        bhajanmandaliModel = BhajanMandali
+        samithiModel = Samithi
+        bhajanmandalis = session.query(bhajanmandaliModel).filter((bhajanmandaliModel.SamithiID == samithiModel.ID) & (samithiModel.DistrictID == districtId)).all()
+        return bhajanmandalis
+    
 @router.post("/bhajanmandalis/add")
-def create_bhajanmandali(samithiid:int, bhajanmandaliregno: str, bhajanmandaliname: str):
+def create_bhajanmandali(bmPayload: BMToCreate):
     with SessionLocal() as session:
         bhajanmandaliModel = BhajanMandali
         maxBhajanMandaliId = session.query(func.max(bhajanmandaliModel.ID)).scalar()
-        maxValOfBMCode = session.query(bhajanmandaliModel.BhajanMandaliCode).filter(bhajanmandaliModel.SamithiID==samithiid).order_by(desc(bhajanmandaliModel.BhajanMandaliCode)).limit(1).scalar()
+        maxValOfBMCode = session.query(bhajanmandaliModel.BhajanMandaliCode).filter(bhajanmandaliModel.SamithiID==bmPayload.samithiId).order_by(desc(bhajanmandaliModel.BhajanMandaliCode)).limit(1).scalar()
         splitMaxValOfBMCode = (str(maxValOfBMCode)).split("-")
         intValOfLastIndex = splitMaxValOfBMCode[len(splitMaxValOfBMCode)-1]
         intValOfLastIndexOfItemToCreate = int(intValOfLastIndex) + 1
         strValOfLastIndexOfItemToCreate = str(intValOfLastIndexOfItemToCreate)
         strValOfLastIndexOfItemToCreateWithZFill = strValOfLastIndexOfItemToCreate.zfill(3)
         strValOfBMCodeToCreate = (str(maxValOfBMCode))[:-len(intValOfLastIndex)] + strValOfLastIndexOfItemToCreateWithZFill
-        new_bhajanmandali = bhajanmandaliModel(ID = (maxBhajanMandaliId + 1), SamithiID = samithiid, BhajanMandaliCode = strValOfBMCodeToCreate, BhajanMandaliRegNo = bhajanmandaliregno, BhajanMandaliName = bhajanmandaliname, CreatedBy = "Portal")
+        new_bhajanmandali = bhajanmandaliModel(ID = (maxBhajanMandaliId + 1), SamithiID = bmPayload.samithiId, BhajanMandaliCode = strValOfBMCodeToCreate, BhajanMandaliRegNo = bmPayload.bmRegNo, BhajanMandaliName = bmPayload.bmName, CreatedBy = "Portal")
         session.add(new_bhajanmandali)
         session.commit()
         session.refresh(new_bhajanmandali)
         return {"message":"Bhajan Mandali created", "bhajanmandali_id":strValOfBMCodeToCreate}
     
 @router.put("/bhajanmandalis/update/{id}")
-def update_bhajanmandali(id: int, samithiid:int, bhajanmandaliregno: str, bhajanmandaliname: str):
+def update_bhajanmandali(id: int, bmPayload: BMToUpdate):
     with SessionLocal() as session:
         bhajanmandaliModel = BhajanMandali
         bhajanmandaliToUpdate = session.query(bhajanmandaliModel).filter(bhajanmandaliModel.ID == id).first()
         if bhajanmandaliToUpdate:
-            bhajanmandaliToUpdate.SamithiID = samithiid
-            bhajanmandaliToUpdate.BhajanMandaliRegNo = bhajanmandaliregno
-            bhajanmandaliToUpdate.BhajanMandaliName = bhajanmandaliname
-            bhajanmandaliToUpdate.UpdatedBy = "Portal"
+            bhajanmandaliToUpdate.BhajanMandaliRegNo = bmPayload.bmRegNo
+            bhajanmandaliToUpdate.BhajanMandaliName = bmPayload.bmName
+            bhajanmandaliToUpdate.UpdatedBy = bmPayload.updatedBy
             session.commit()
             return {"message":f"Bhajan Mandali with ID {id} updated"}
         return {"error": f"Bhajan Mandali with ID {id} not found"}
