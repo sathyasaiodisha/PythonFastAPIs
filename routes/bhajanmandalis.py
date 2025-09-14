@@ -25,11 +25,18 @@ def get_bhajanmandalis():
         return bhajanmandalis
     
 @router.get("/district/{districtId}/bhajanmandalis")
-def get_bhajanmandalis(districtId: int):
+def get_bhajanmandalisbydistrict(districtId: int):
     with SessionLocal() as session:
         bhajanmandaliModel = BhajanMandali
         samithiModel = Samithi
         bhajanmandalis = session.query(bhajanmandaliModel).filter((bhajanmandaliModel.SamithiID == samithiModel.ID) & (samithiModel.DistrictID == districtId)).all()
+        return bhajanmandalis
+    
+@router.get("/samithi/{samithiId}/bhajanmandalis")
+def get_bhajanmandalisbysamithi(samithiId: int):
+    with SessionLocal() as session:
+        bhajanmandaliModel = BhajanMandali
+        bhajanmandalis = session.query(bhajanmandaliModel).filter(bhajanmandaliModel.SamithiID == samithiId).all()
         return bhajanmandalis
     
 @router.post("/bhajanmandalis/add")

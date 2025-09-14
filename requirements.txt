@@ -1,4 +1,3 @@
-unixodbc
 pydantic
 pydantic-core
 fastapi

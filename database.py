@@ -6,7 +6,7 @@ import urllib.parse
 
 username = "ssswsodsa"
 password = "Sr!s@thy@s@!"
-servername = "103.133.214.224,1436"
+servername = "172.93.223.88,1433"
 dbname = "srisathyasaiod"
 drivername = "ODBC Driver 17 for SQL Server"
 #SQL Server Native Client 11.0"
@@ -17,7 +17,6 @@ encodedDriverName = urllib.parse.quote_plus(drivername)
 
 # **MS SQL Server Connection String**
 DATABASE_URL = f"mssql+pyodbc://{username}:{encodedPwd}@{servername}/{dbname}?driver={encodedDriverName}"
-
 
 
 # **Create Engine & Session**
