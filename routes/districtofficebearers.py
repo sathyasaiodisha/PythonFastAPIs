@@ -83,6 +83,7 @@ def create_districtofficebearer(districtOfficialToCreate: DistrictOfficialToCrea
                                                        ContactNo2 = districtOfficialToCreate.contactno2, 
                                                        Email = districtOfficialToCreate.email, 
                                                        Gender = districtOfficialToCreate.gender, CreatedBy = "Portal")
+        
         session.add(new_districtOfficeBearer)
         session.commit()
         session.refresh(new_districtOfficeBearer)
