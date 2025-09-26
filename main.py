@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import saidistricts, samitis, bhajanmandalis, programmes, stateofficebearers, districtofficebearers, samithiofficebearers, events, bvgurus
+from routes import saidistricts, samitis, bhajanmandalis, programmes, stateofficebearers, districtofficebearers, samithiofficebearers, events, bvgurus,designations
 #from mangum import Mangum
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -29,7 +29,8 @@ app.include_router(stateofficebearers.router)
 app.include_router(districtofficebearers.router)
 app.include_router(samithiofficebearers.router)
 app.include_router(events.router)
-app.include_router(bvgurus.router)
+# app.include_router(bvgurus.router)
+app.include_router(designations.router)
 
 # Pass the required route to the decorator. 
 
