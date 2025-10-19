@@ -7,4 +7,6 @@ sqlalchemy
 sqlmodel
 pyodbc
 uvicorn
+python-jose[cryptography]
+passlib[argon2]
 mangum

@@ -1,7 +1,8 @@
 from fastapi import FastAPI
-from routes import saidistricts, samitis, bhajanmandalis, programmes, stateofficebearers, districtofficebearers, samithiofficebearers, events, bvgurus
+from routes import saidistricts, samitis, bhajanmandalis, programmes, stateofficebearers, districtofficebearers, samithiofficebearers, events, bvgurus, authorize, usermanagement
 #from mangum import Mangum
 from fastapi.middleware.cors import CORSMiddleware
+
 
 
 
@@ -9,7 +10,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200", "http://localhost", "http://127.0.0.1:8000","http://127.0.0.1"],  # Angular dev server
+    allow_origins=["http://localhost:4200", "http://localhost", "http://127.0.0.1:8000","http://127.0.0.1", "http://127.0.0.1:4200"],  # Angular dev server
     
     allow_credentials=True,
     allow_methods=["*"],
@@ -30,6 +31,8 @@ app.include_router(districtofficebearers.router)
 app.include_router(samithiofficebearers.router)
 app.include_router(events.router)
 app.include_router(bvgurus.router)
+app.include_router(usermanagement.router)
+app.include_router(authorize.router)
 
 # Pass the required route to the decorator. 
 
