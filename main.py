@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import saidistricts, samitis, bhajanmandalis, programmes, stateofficebearers, districtofficebearers, samithiofficebearers, events, bvgurus, authorize, usermanagement
+from routes import saidistricts, samitis, bhajanmandalis, programmes, stateofficebearers, districtofficebearers, samithiofficebearers, events, bvgurus, designations, authorize, usermanagement
 #from mangum import Mangum
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -31,9 +31,9 @@ app.include_router(districtofficebearers.router)
 app.include_router(samithiofficebearers.router)
 app.include_router(events.router)
 app.include_router(bvgurus.router)
+app.include_router(designations.router)
 app.include_router(usermanagement.router)
 app.include_router(authorize.router)
-
 # Pass the required route to the decorator. 
 
 #handler = Mangum(app)
