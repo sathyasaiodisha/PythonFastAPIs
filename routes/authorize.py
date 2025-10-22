@@ -14,7 +14,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 # Password hashing
 # pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/login")
 
 def verify_password(plain_password, hashed_password):
     return verifyPassword(plain_password, hashed_password)
@@ -36,10 +36,13 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
+        print("✅here at the beginning")
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
-        role: str = payload.get("role")
-        if username is None or role is None:
+        juris: str = payload.get("juris")
+        print("✅user name:", username)
+        print("✅juris:", juris)
+        if username is None or juris is None:
             raise HTTPException(status_code=401, detail="Invalid token")
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
@@ -48,11 +51,12 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         user = session.query(dataadmins).filter(dataadmins.UserName == username).first()
         if user is None:
             raise HTTPException(status_code=401, detail="User not found")
-        return {"username": username, "role": role}
+        print("✅Reaches here")
+        return {"username": username, "juris": juris}
 
 def require_role(required_role: str):
     async def role_checker(user=Depends(get_current_user)):
-        if user["role"] != required_role:
+        if user["juris"] != required_role:
             raise HTTPException(status_code=403, detail="Not enough permissions")
         return user
     return role_checker
@@ -60,7 +64,7 @@ def require_role(required_role: str):
 
 router = APIRouter()
 
-@router.post("/login")
+@router.post("/api/login")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
@@ -80,6 +84,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 @router.get("/users/me")
 async def read_users_me(current_user=Depends(get_current_user)):
+    print("✅Here")
     return current_user
 
 @router.get("/admin-only")

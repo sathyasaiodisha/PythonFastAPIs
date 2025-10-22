@@ -51,6 +51,15 @@ def get_alldataadmins():
 
         return dataAdmins
     
+@router.get("/dataadmins/{username}")
+def get_dataadminbyusername(username: str):
+    with SessionLocal() as session:
+        dataAdminsModel = AdminUser
+
+        dataAdmin = session.query(dataAdminsModel).filter(dataAdminsModel.UserName==username).first()
+
+        return dataAdmin
+    
 @router.get("/dataadminjurisdictions")
 def get_dataadminjurisdictions():
     with SessionLocal() as session:
