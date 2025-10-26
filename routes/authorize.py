@@ -36,12 +36,9 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
-        print("✅here at the beginning")
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         juris: str = payload.get("juris")
-        print("✅user name:", username)
-        print("✅juris:", juris)
         if username is None or juris is None:
             raise HTTPException(status_code=401, detail="Invalid token")
     except JWTError:
@@ -51,7 +48,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         user = session.query(dataadmins).filter(dataadmins.UserName == username).first()
         if user is None:
             raise HTTPException(status_code=401, detail="User not found")
-        print("✅Reaches here")
         return {"username": username, "juris": juris}
 
 def require_role(required_role: str):
@@ -84,7 +80,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 @router.get("/users/me")
 async def read_users_me(current_user=Depends(get_current_user)):
-    print("✅Here")
     return current_user
 
 @router.get("/admin-only")
