@@ -18,6 +18,10 @@ def get_topsssootweets():
             sssooTweetsModel.TweetID,
             sssooTweetsModel.TweetText,
             sssooTweetsModel.TweetLongText,
+            sssooTweetsModel.CreatedDate,
+            sssooTweetsModel.TweeterUserName,
+            sssooTweetsModel.UserProfileImgUrl,
+            sssooTweetsMediaModel.MediaType,
             sssooTweetsMediaModel.MediaKey,
             sssooTweetsMediaModel.MediaUrl            
         ).select_from(outerjoin(sssooTweetsModel, sssooTweetsMediaModel, sssooTweetsModel.ID==sssooTweetsMediaModel.SSSOOTableTweetId))
