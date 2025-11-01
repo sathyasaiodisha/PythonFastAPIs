@@ -1,7 +1,7 @@
 from typing import Optional
 import datetime
 
-from sqlalchemy import Boolean, DateTime, ForeignKeyConstraint, Index, Integer, NCHAR, PrimaryKeyConstraint, Unicode, text, Table, Column
+from sqlalchemy import Boolean, DateTime, ForeignKeyConstraint, Index, Integer, BigInteger, NCHAR, TEXT, PrimaryKeyConstraint, Unicode, text, Table, Column, Identity
 
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
@@ -125,6 +125,7 @@ class BalVikasSubjects(Base):
 class BhajanMandali(Base):
     __tablename__ = 'BhajanMandali'
     __table_args__ = (
+        ForeignKeyConstraint(['SamithiID'], ['txnm.Samithi.ID'], name='FK_Bhajanmandali_Samithi'),
         PrimaryKeyConstraint('ID', name='PK__BhajanMa__3214EC2716AC76DB'),
         Index('UQ__BhajanMa__487507FEE4928FD3', 'BhajanMandaliRegNo', unique=True),
         Index('UQ__BhajanMa__8FFD5B4F42F5679C', 'BhajanMandaliCode', unique=True),
@@ -143,6 +144,8 @@ class BhajanMandali(Base):
 
     BalVikasCentre: Mapped[list['BalVikasCentre']] = relationship('BalVikasCentre', back_populates='BhajanMandali_')
     BalVikasGuru: Mapped[list['BalVikasGuru']] = relationship('BalVikasGuru', back_populates='BhajanMandali_')
+    
+    Samithi_: Mapped[Optional['Samithi']] = relationship('Samithi', back_populates='BhajanMandali')
 
 class District(Base):
     __tablename__ = 'District'
@@ -166,6 +169,7 @@ class District(Base):
     BalVikasGuru: Mapped[list['BalVikasGuru']] = relationship('BalVikasGuru', back_populates='District_')
     DistrictOfficeBearer: Mapped[list['DistrictOfficeBearer']] = relationship('DistrictOfficeBearer', back_populates='District_')
     AdminUser: Mapped[list['AdminUser']] = relationship('AdminUser', back_populates='District_')
+    Samithi: Mapped[list['Samithi']] = relationship('Samithi', back_populates='District_')
 
 
 class GuruSkillset(Base):
@@ -210,6 +214,7 @@ class OrgHierarchyCodes(Base):
 class Samithi(Base):
     __tablename__ = 'Samithi'
     __table_args__ = (
+        ForeignKeyConstraint(['DistrictID'], ['txnm.District.ID'], name='FK_Samithi_District'),
         PrimaryKeyConstraint('ID', name='PK__Samithi__3214EC27619DF389'),
         Index('UQ__Samithi__22399A93ED0E1047', 'SamithiCode', unique=True),
         Index('UQ__Samithi__C6B568EEE4221E26', 'SamithiRegNo', unique=True),
@@ -230,6 +235,9 @@ class Samithi(Base):
     Events: Mapped[list['Events']] = relationship('Events', back_populates='Samithi_')
     BalVikasGuru: Mapped[list['BalVikasGuru']] = relationship('BalVikasGuru', back_populates='Samithi_')
     SamithiOfficeBearer: Mapped[list['SamithiOfficeBearer']] = relationship('SamithiOfficeBearer', back_populates='Samithi_')
+    BhajanMandali: Mapped[list['BhajanMandali']] = relationship('BhajanMandali', back_populates='Samithi_')
+    
+    District_: Mapped[Optional['District']] = relationship('District', back_populates='Samithi')
 
 
 class Wings(Base):
@@ -595,3 +603,82 @@ t_AdminUserJurisdiction = Table(
     ForeignKeyConstraint(['JurisdictionID'], ['txnm.AdminJurisdiction.ID'], name='FK__AdminUser__Juris__2334397B'),
     schema='org'
 )
+
+class SSSOOTwitterAccounts(Base):
+    __tablename__ = 'SSSOOTwitterAccounts'
+    __table_args__ = (
+        PrimaryKeyConstraint('ID', name='PK__SSSOOTwi__3214EC27FAB3EF33'),
+        {'schema': 'config'}
+    )
+
+    ID: Mapped[int] = mapped_column(Integer, Identity(start=1, increment=1), primary_key=True)
+    TwitterUserID: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    BearerToken: Mapped[str] = mapped_column(Unicode(4000, 'SQL_Latin1_General_CP1_CI_AS'), nullable=False)
+    CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False, server_default=text('(getdate())'))
+    UpdatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False, server_default=text('(getdate())'))
+    CreatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
+    UpdatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
+
+    SSSOOTweetsAPIUsage: Mapped[list['SSSOOTweetsAPIUsage']] = relationship('SSSOOTweetsAPIUsage', back_populates='SSSOOTwitterAccounts_')
+
+
+class SSSOOTweets(Base):
+    __tablename__ = 'SSSOOTweets'
+    __table_args__ = (
+        PrimaryKeyConstraint('ID', name='PK__SSSOOTwe__3214EC27D1CDCC10'),
+        {'schema': 'ops'}
+    )
+
+    ID: Mapped[int] = mapped_column(Integer, Identity(start=1, increment=1), primary_key=True)
+    TweetID: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False, server_default=text('(getdate())'))
+    UpdatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False, server_default=text('(getdate())'))
+    TweetText: Mapped[Optional[str]] = mapped_column(TEXT(2147483647, 'SQL_Latin1_General_CP1_CI_AS'))
+    TweetLongText: Mapped[Optional[str]] = mapped_column(Unicode(collation='SQL_Latin1_General_CP1_CI_AS'))
+    CreatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
+    UpdatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
+
+    SSSOOTweetMedia: Mapped[list['SSSOOTweetMedia']] = relationship('SSSOOTweetMedia', back_populates='SSSOOTweets_')
+
+
+class SSSOOTweetMedia(Base):
+    __tablename__ = 'SSSOOTweetMedia'
+    __table_args__ = (
+        ForeignKeyConstraint(['SSSOOTableTweetId'], ['ops.SSSOOTweets.ID'], ondelete='CASCADE', name='FK_TweetMedia_Tweets'),
+        PrimaryKeyConstraint('ID', name='PK__SSSOOTwe__3214EC27E929A711'),
+        {'schema': 'ops'}
+    )
+
+    ID: Mapped[int] = mapped_column(Integer, Identity(start=1, increment=1), primary_key=True)
+    SSSOOTableTweetId: Mapped[int] = mapped_column(Integer, nullable=False)
+    CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False, server_default=text('(getdate())'))
+    UpdatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False, server_default=text('(getdate())'))
+    MediaKey: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
+    MediaUrl: Mapped[Optional[str]] = mapped_column(Unicode(collation='SQL_Latin1_General_CP1_CI_AS'))
+    MediaType: Mapped[Optional[str]] = mapped_column(Unicode(50, 'SQL_Latin1_General_CP1_CI_AS'))
+    CreatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
+    UpdatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
+
+    SSSOOTweets_: Mapped['SSSOOTweets'] = relationship('SSSOOTweets', back_populates='SSSOOTweetMedia')
+
+
+class SSSOOTweetsAPIUsage(Base):
+    __tablename__ = 'SSSOOTweetsAPIUsage'
+    __table_args__ = (
+        ForeignKeyConstraint(['TwitterAccount'], ['config.SSSOOTwitterAccounts.ID'], name='FK_APIUsage_Account'),
+        PrimaryKeyConstraint('ID', name='PK__SSSOOTwe__3214EC27B786455A'),
+        {'schema': 'ops'}
+    )
+
+    ID: Mapped[int] = mapped_column(Integer, Identity(start=1, increment=1), primary_key=True)
+    TweetMonth: Mapped[int] = mapped_column(Integer, nullable=False)
+    TweetYear: Mapped[int] = mapped_column(Integer, nullable=False)
+    TwitterAccount: Mapped[int] = mapped_column(Integer, nullable=False)
+    LastFetchedTweetID: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    LastFetchedCount: Mapped[int] = mapped_column(Integer, nullable=False)
+    CreatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False, server_default=text('(getdate())'))
+    UpdatedDate: Mapped[datetime.datetime] = mapped_column(DateTime, nullable=False, server_default=text('(getdate())'))
+    CreatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
+    UpdatedBy: Mapped[Optional[str]] = mapped_column(Unicode(100, 'SQL_Latin1_General_CP1_CI_AS'))
+
+    SSSOOTwitterAccounts_: Mapped['SSSOOTwitterAccounts'] = relationship('SSSOOTwitterAccounts', back_populates='SSSOOTweetsAPIUsage')
