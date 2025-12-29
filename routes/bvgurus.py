@@ -102,7 +102,7 @@ def get_guruskillsets():
 async def upload_guru_photo(file: UploadFile = File(...)):
     try:
         upload_dir = "/var/www/PHOTOS/BalVikasGurus"
-        base_url = "http://172.93.223.88:8080/guruphotos"
+        base_url = "http://172.93.223.88:8080/images/bvgurus"
         # Construct file path
         file_path = os.path.join(upload_dir, file.filename)
         file_url = f"{base_url}/{file.filename}"
